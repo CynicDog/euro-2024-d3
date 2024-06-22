@@ -8,7 +8,8 @@ d3.json('data/data.json', d => {
     const scoreSpan = document.getElementById('scoreSpan');
     scoreSpan.textContent = data.score;
 
-    renderFormations(data.home.formations[0].formationPositions, 'home');
+    renderFormations(data.home.formations[0], 'home');
+    renderFormations(data.home.formations[0], 'away');
 
 }).catch(error => {
     console.error('Error loading data:', error);
