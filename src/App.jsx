@@ -1,3 +1,4 @@
+import './index.css'
 import * as d3 from 'd3';
 import {useEffect, useState} from "react";
 import DarkModeSwitch from "./components/DarkmodeSwitch.jsx";
@@ -29,10 +30,10 @@ function App() {
                             <DarkModeSwitch/>
                         </div>
                         <div>Home:
-                            <span>{data.home.name}</span>
+                            <span className="team team-home">{data.home.name}</span>
                         </div>
                         <div>Away:
-                            <span>{data.away.name}</span>
+                            <span className="team team-away">{data.away.name}</span>
                         </div>
                     </div>
 

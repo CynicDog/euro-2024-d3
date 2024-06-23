@@ -52,3 +52,16 @@ h3 {
   font-family: 'Roboto', sans-serif;
   font-size: 14px;
 }
+
+span.team {
+  display: inline-block;
+  margin: 2px 1px;
+  padding: 2px 5px;
+  line-height: 1.2rem;
+  font-weight: 500;
+  color: #000000;
+  border-radius: 4px;
+}
+
+.team-home { background-color: #ACE1AF; }
+.team-away { background-color: #FFC0CB; }

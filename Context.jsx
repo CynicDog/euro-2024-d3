@@ -18,13 +18,12 @@ export const ThemeProvider = ({children}) => {
 }
 export const useTheme = () => useContext(ThemeContext);
 
-
 const ColorContext = createContext();
 
 export const ColorProvider = ({children}) => {
     const [color, setColor] = useState({
-        home: '#FFC0CB',
-        away: '#ACE1AF'
+        home: '#ACE1AF',
+        away: '#FFC0CB'
     });
 
     return (
