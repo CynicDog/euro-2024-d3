@@ -9,16 +9,13 @@ h1, h2, h3, h4 {
   font-weight: 200;
 }
 h1 {
-  margin: 6rem 0 2rem;
   font-size: 4rem;
 }
 h2 {
-  margin: 5rem 0 2rem;
   font-size: 2.8rem;
   line-height: 1.2;
 }
 h3 {
-  margin: 3rem 0 1rem;
   font-size: 2rem;
   line-height: 1.2;
 }
@@ -27,8 +24,6 @@ h3 {
 }
 
 .underscore {
-  color: #222323;
-  text-decoration: none;
   box-shadow: inset 0 -5px 0 0 rgba(48, 82, 82, 0.3);
   transition: box-shadow 0.2s ease-out;
 }
@@ -39,4 +34,21 @@ h3 {
 
 .mono {
   font-family: 'IBM Plex Mono', monospace;
+}
+
+/* Responsive container of the svg element */
+.responsive-svg-container {
+  width: 100%;
+  max-width: 1000px;
+}
+@media screen and (max-width: 596px) {
+  .responsive-svg-container {
+    margin-bottom: 20px;
+  }
+}
+
+/* Axis and labels styles */
+.tick text {
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
 }
