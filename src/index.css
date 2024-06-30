@@ -1,12 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@300&display=swap');
-* {
-  font-family: 'Oswald', sans-serif;
-  font-optical-sizing: auto;
-}
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Text:ital@0;1&display=swap');
+/** {*/
+/*  font-family: 'Oswald', sans-serif;*/
+/*  font-optical-sizing: auto;*/
+/*}*/
 
 h1, h2, h3, h4 {
-  font-weight: 200;
+  font-family: "DM Serif Text", serif;
+  font-weight: 400;
 }
 h1 {
   font-size: 4rem;
@@ -32,10 +33,6 @@ h3 {
   transition-timing-function: ease-in;
 }
 
-.mono {
-  font-family: 'IBM Plex Mono', monospace;
-}
-
 /* Responsive container of the svg element */
 .responsive-svg-container {
   width: 100%;
@@ -46,22 +43,3 @@ h3 {
     margin-bottom: 20px;
   }
 }
-
-/* Axis and labels styles */
-.tick text {
-  font-family: 'Roboto', sans-serif;
-  font-size: 14px;
-}
-
-span.team {
-  display: inline-block;
-  margin: 2px 1px;
-  padding: 2px 5px;
-  line-height: 1.2rem;
-  font-weight: 500;
-  color: #000000;
-  border-radius: 4px;
-}
-
-.team-home { background-color: #ACE1AF; }
-.team-away { background-color: #FFC0CB; }

@@ -1,0 +1,104 @@
+{
+  "name": "finals",
+  "team_1": "",
+  "team_2": "",
+  "won": "",
+  "children": [
+    {
+      "name": "semi-finals-1",
+      "team_1": "",
+      "team_2": "",
+      "won": "",
+      "children": [
+        {
+          "name": "quarter-finals-1-1",
+          "team_1": "",
+          "team_2": "",
+          "won": "",
+          "children": [
+            {
+              "name": "round-of-sixteen-1-1-1",
+              "team_1": "Spain",
+              "team_2": "Georgia",
+              "won": ""
+            },
+            {
+              "name": "round-of-sixteen-1-1-2",
+              "team_1": "Germany",
+              "team_2": "Denmark",
+              "won": "Germany"
+            }
+          ]
+        },
+        {
+          "name": "quarter-finals-1-2",
+          "team_1": "",
+          "team_2": "",
+          "won": "",
+          "children": [
+            {
+              "name": "round-of-sixteen-1-2-1",
+              "team_1": "Portugal",
+              "team_2": "Slovenia",
+              "won": ""
+            },
+            {
+              "name": "round-of-sixteen-1-2-2",
+              "team_1": "France",
+              "team_2": "Belgium",
+              "won": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "semi-finals-2",
+      "team_1": "",
+      "team_2": "",
+      "won": "",
+      "children": [
+        {
+          "name": "quarter-finals-2-1",
+          "team_1": "",
+          "team_2": "",
+          "won": "",
+          "children": [
+            {
+              "name": "round-of-sixteen-2-1-1",
+              "team_1": "Romania",
+              "team_2": "Netherlands",
+              "won": ""
+            },
+            {
+              "name": "round-of-sixteen-2-1-2",
+              "team_1": "Austria",
+              "team_2": "Türkiye",
+              "won": ""
+            }
+          ]
+        },
+        {
+          "name": "quarter-finals-2-2",
+          "team_1": "",
+          "team_2": "",
+          "won": "",
+          "children": [
+            {
+              "name": "round-of-sixteen-2-2-1",
+              "team_1": "England",
+              "team_2": "Slovakia",
+              "won": ""
+            },
+            {
+              "name": "round-of-sixteen-2-2-2",
+              "team_1": "Switzerland",
+              "team_2": "Italy",
+              "won": "Switzerland"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
