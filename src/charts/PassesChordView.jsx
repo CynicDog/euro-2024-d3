@@ -4,14 +4,20 @@ import ChartContainer from "../components/ChartContainer.jsx";
 import { useMatch } from "../../Context.jsx";
 
 const PassesChordView = () => {
-    const width = 400;
-    const height = 400;
+    const width = 640;
+    const height = 640;
     const margin = { top: 0, right: 0, bottom: 0, left: 0 };
     const outerRadius = Math.min(width, height) * 0.5 - 30;
     const innerRadius = outerRadius - 20;
 
     const { match } = useMatch();
     const [team, setTeam] = useState(null);
+
+    useEffect(() => {
+
+        setTeam(match?.home);
+
+    }, [match]);
 
     const handleTeamClick = selectedTeam => {
         setTeam(selectedTeam);
@@ -22,8 +28,6 @@ const PassesChordView = () => {
     useEffect(() => {
 
         if (!match) return;
-
-        // TODO: initialize team on match select
 
         // Filter pass events for the selected team
         const eventData = match.events.filter(
@@ -83,6 +87,7 @@ const PassesChordView = () => {
             .attr("d", ribbon)
             .attr("fill", d => d3.schemeCategory10[d.target.index % 10])
             .attr("opacity", 0.7)
+            .attr("width", "70%").attr("height", "70%")
             .append("title")
             .text(d => `From: ${playerIds[d.source.index]} to ${playerIds[d.target.index]}, Value: ${d.source.value}`);
 
@@ -117,7 +122,6 @@ const PassesChordView = () => {
                             width={width}
                             height={height}
                             viewBox={`-${width / 2} -${height / 2} ${width} ${height}`}
-                            style={{ maxWidth: "100%", height: "auto", font: "10px sans-serif" }}
                         ></svg>
                     </ChartContainer>
                 </div>

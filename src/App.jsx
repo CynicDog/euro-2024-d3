@@ -34,7 +34,7 @@ function App() {
                     </div>
                 </div>
             ) : (
-                <div className="container pt-5 fw-lighter">
+                <div className="container pt-3 fw-lighter">
                     <div className="draw-section">
                         <div className="d-flex justify-content-between align-items-center">
                             <div className="fs-2">EURO 2024 Match Stats</div>
