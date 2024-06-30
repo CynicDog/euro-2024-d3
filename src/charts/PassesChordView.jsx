@@ -85,7 +85,7 @@ const PassesChordView = () => {
             .join("path")
             .attr("class", "ribbon")
             .attr("d", ribbon)
-            .attr("fill", d => d3.schemeCategory10[d.target.index % 10])
+            .attr("fill", d => d3.schemeTableau10[d.target.index % 10])
             .attr("opacity", 0.7)
             .attr("width", "70%").attr("height", "70%")
             .append("title")
