@@ -18,19 +18,16 @@ export const ThemeProvider = ({children}) => {
 }
 export const useTheme = () => useContext(ThemeContext);
 
-const ColorContext = createContext();
+const MatchContext = createContext();
 
-export const ColorProvider = ({children}) => {
-    const [color, setColor] = useState({
-        home: '#ACE1AF',
-        away: '#FFC0CB'
-    });
+export const MatchProvider = ({children}) => {
+    const [match, setMatch] = useState(null);
 
     return (
-        <ColorContext.Provider value={{color}}>
+        <MatchContext.Provider value={{match, setMatch}}>
             {children}
-        </ColorContext.Provider>
+        </MatchContext.Provider>
     )
 }
 
-export const useColor = () => useContext(ColorContext);
+export const useMatch = () => useContext(MatchContext);

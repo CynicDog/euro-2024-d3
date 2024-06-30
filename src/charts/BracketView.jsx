@@ -1,14 +1,18 @@
-import { tree } from "d3-hierarchy";
+import {tree} from "d3-hierarchy";
 import * as d3 from "d3";
-import { link, curveBumpX } from "d3-shape";
-import {useEffect, useRef} from "react";
+import {link, curveBumpX} from "d3-shape";
+import {useEffect, useRef, useState} from "react";
 import ChartContainer from "../components/ChartContainer.jsx";
+import {useMatch, useTheme} from "../../Context.jsx";
 
-const BracketView = (props) => {
+const BracketView = ({root, detailViewRef}) => {
+
+    const {theme} = useTheme();
+    const {setMatch} = useMatch();
 
     const width = 800;
     const height = 450;
-    const margin = {top:60, right: 100, bottom: 0, left: 100};
+    const margin = {top: 20, right: 100, bottom: 20, left: 100};
     const innerWidth = width - margin.left - margin.right;
     const innerHeight = height - margin.top - margin.bottom;
 
@@ -19,27 +23,27 @@ const BracketView = (props) => {
         const bracketContainer = d3.select(bracketRef.current);
 
         const treeLayoutGenerator = tree()
-            .size([innerHeight, innerWidth])(props.root);
+            .size([innerHeight, innerWidth])(root);
 
-        const linGenerator = link(curveBumpX)
+        const linkGenerator = link(curveBumpX)
             .x(d => innerWidth - d.y)
             .y(d => d.x);
 
         // Render links
         bracketContainer
             .selectAll(".bracket-link")
-            .data(props.root.links())
+            .data(root.links())
             .join("path")
             .attr("class", "bracket-link")
-            .attr("d", d => linGenerator(d))
+            .attr("d", d => linkGenerator(d))
             .attr("fill", "none")
             .attr("stroke", "gray")
-            .attr("stroke-opacity", .6);
+            .attr("stroke-opacity", 0.6);
 
         // Render nodes
         bracketContainer
             .selectAll(".bracket-node")
-            .data(props.root.descendants())
+            .data(root.descendants())
             .join("circle")
             .attr("class", "bracket-node")
             .attr("cx", d => innerWidth - d.y)
@@ -47,12 +51,12 @@ const BracketView = (props) => {
             .attr("r", 4)
             .attr("fill", "gray")
             .attr("stroke", "gray")
-            .attr("stroke-opacity", .6);
+            .attr("stroke-opacity", 0.6);
 
         // Render labels first
         const labels = bracketContainer
             .selectAll(".bracket-label")
-            .data(props.root.descendants())
+            .data(root.descendants())
             .join("text")
             .attr("class", "bracket-label")
             .attr("x", d => innerWidth - d.y - 4)
@@ -60,12 +64,12 @@ const BracketView = (props) => {
             .attr("text-anchor", "start")
             .attr("alignment-baseline", "middle")
             .style("font-weight", 100)
-            .style("fill", "gray")
-            .style("font-size", "12px")
+            .style("fill", `${theme === 'light'? "black" :"white"}`)
+            .style("font-size", "10px")
             .text(d => (d.data.team_1 !== "" ? `${d.data.team_1} vs. ${d.data.team_2}` : ""));
 
         // Measure text widths and set background widths
-        labels.each(function(d) {
+        labels.each(function (d) {
             const bbox = this.getBBox();
             if (bbox.width > 0) {
                 d.bboxWidth = bbox.width + 3;
@@ -75,7 +79,7 @@ const BracketView = (props) => {
         // Render background on labels based on measured width
         bracketContainer
             .selectAll(".bracket-label-background")
-            .data(props.root.descendants())
+            .data(root.descendants())
             .join("rect")
             .attr("class", "bracket-label-background")
             .attr("x", d => innerWidth - d.y - 5)
@@ -84,21 +88,28 @@ const BracketView = (props) => {
             .attr("height", "16px")
             .attr("width", d => d.bboxWidth)
             .style("fill", "gray")
-            .style("opacity", 0.3)
+            .style("opacity", 0.15)
             .style("cursor", "pointer")
-            .on("click", () => {
-                // scroll to path view
-            })
-        ;
-    }, []);
+            .on("click", (e, d) => {
+                // fetch clicked match data
+                d3.json(`src/data/${d.data.name}.json`)
+                    .then(data => setMatch(data))
+                // scroll to detail view
+                if (detailViewRef.current) {
+                    detailViewRef.current.scrollIntoView({behavior: "smooth"});
+                }
+            });
+    }, [root, theme]);
 
     return (
-        <ChartContainer
-            width={width}
-            height={height}
-            margin={margin}>
-            <g ref={bracketRef}></g>
-        </ChartContainer>
+        <>
+            <ChartContainer
+                width={width}
+                height={height}
+                margin={margin}>
+                <g ref={bracketRef}></g>
+            </ChartContainer>
+        </>
     );
 }
 
