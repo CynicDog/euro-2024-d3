@@ -90,10 +90,6 @@ const BracketView = ({ root, detailViewRef }) => {
             .on("click", (e, d) => {
                 // fetch clicked match data
                 d3.json(`src/data/${d.data.name}.json`).then(data => setMatch(data));
-                // scroll to detail view
-                if (detailViewRef.current) {
-                    detailViewRef.current.scrollIntoView({ behavior: "smooth" });
-                }
             });
     }, [root, theme, scaledFontSize]);
 

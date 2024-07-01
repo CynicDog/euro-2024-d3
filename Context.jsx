@@ -52,7 +52,7 @@ export const ScaleProvider = ({ children }) => {
 
     const fontSizeScale = d3.scaleLinear()
         .domain([600, 1200])
-        .range([21, 17])
+        .range([20, 12])
         .clamp(true);
 
     const [fontSize, setFontSize] = useState(fontSizeScale(window.innerWidth));

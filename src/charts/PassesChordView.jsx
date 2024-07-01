@@ -3,8 +3,8 @@ import { useEffect, useRef, useState } from "react";
 import { useMatch } from "../../Context.jsx";
 
 const PassesChordView = () => {
-    const width = 740;
-    const height = 740;
+    const width = 700;
+    const height = 700;
     const outerRadius = Math.min(width, height) * 0.5 - 30;
     const innerRadius = outerRadius - 20;
 
@@ -85,13 +85,17 @@ const PassesChordView = () => {
             .append("title")
             .text(d => `From: ${playerIds[d.source.index]} to ${playerIds[d.target.index]}, Value: ${d.source.value}`);
 
+        // scroll to chord view
+        if (chordRef.current) {
+            chordRef.current.scrollIntoView({ behavior: "smooth" });
+        }
     }, [match, team]);
 
     return (
         <div>
             {match !== null && (
                 <>
-                    <div className="d-flex fs-5">
+                    <div className="d-flex justify-content-end fs-5">
                         <span
                             className={`country-name ${team === match.home ? 'text-decoration-underline bg-primary-subtle' : 'bg-light-subtle'}`}
                             onClick={() => handleTeamClick(match.home)}>
@@ -107,8 +111,8 @@ const PassesChordView = () => {
                     {/* chart view */}
                     <svg
                         ref={chordRef}
-                        width="70%"
-                        height="70%"
+                        width="60%"
+                        height="60%"
                         viewBox={`-${width / 2} -${height / 2} ${width} ${height}`}
                         style={{ display: 'block', margin: '0 auto' }}
                     ></svg>
