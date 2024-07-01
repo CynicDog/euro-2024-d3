@@ -93,29 +93,39 @@ const PassesChordView = () => {
 
                     // Highlight ribbons associated with the selected chord
                     svg.selectAll(".ribbon")
+                        .transition()
+                        .duration(300)
                         .attr("opacity", ribbonData => {
                             return (ribbonData.source.index === d.index || ribbonData.target.index === d.index) ? 0.9 : 0.1;
                         });
 
                     // Adjust opacity for player labels associated with the selected chord
                     svg.selectAll(".player-label")
+                        .transition()
+                        .duration(300)
                         .attr("opacity", labelData => uniqueAssociatedIndices.includes(labelData.index) ? 1.0 : 0.1);
 
                     // Highlight the hovered chord
                     svg.selectAll(".group")
+                        .transition()
+                        .duration(300)
                         .attr("opacity", groupData => groupData.index === d.index ? 0.9 : 0.2);
                 })
+                // Reset highlights
                 .on("mouseout", () => {
-                    // Reset the opacity of all ribbons
                     svg.selectAll(".ribbon")
+                        .transition()
+                        .duration(200)
                         .attr("opacity", 0.7);
 
-                    // Reset the opacity of all chords
                     svg.selectAll(".group")
+                        .transition()
+                        .duration(200)
                         .attr("opacity", 1);
 
-                    // Reset the opacity of all labels
                     svg.selectAll(".player-label")
+                        .transition()
+                        .duration(200)
                         .attr("opacity", 1);
                 })
                 .append("title")
