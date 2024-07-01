@@ -178,7 +178,7 @@ const PassesChordView = () => {
         if (chordRef.current) {
             chordRef.current.scrollIntoView({ behavior: "smooth" });
         }
-    }, [match, team, scaledFontSize]);
+    }, [match, team, theme, scaledFontSize]);
 
     return (
         <div>
