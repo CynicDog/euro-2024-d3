@@ -4,7 +4,7 @@ import { link, curveBumpX } from "d3-shape";
 import { useEffect, useRef } from "react";
 import { useMatch, useScale, useTheme } from "../../Context.jsx";
 
-const BracketView = ({ root, detailViewRef }) => {
+const BracketView = ({ root }) => {
     const { theme } = useTheme();
     const { scaledFontSize } = useScale();
     const { setMatch } = useMatch();

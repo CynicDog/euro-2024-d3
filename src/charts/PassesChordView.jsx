@@ -95,7 +95,7 @@ const PassesChordView = () => {
         <div>
             {match !== null && (
                 <>
-                    <div className="d-flex justify-content-end fs-5">
+                    <div className="d-flex justify-content-end">
                         <span
                             className={`country-name ${team === match.home ? 'text-decoration-underline bg-primary-subtle' : 'bg-light-subtle'}`}
                             onClick={() => handleTeamClick(match.home)}>
