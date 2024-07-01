@@ -90,6 +90,8 @@ const PassesChordView = () => {
             .attr("class", "ribbon")
             .attr("d", ribbon)
             .attr("fill", d => d3.schemeSet3[d.target.index % 10])
+            .attr("stroke", "black")
+            .attr("stroke-width", ".1")
             .attr("opacity", 0.7)
             .append("title")
             .text(d => {
@@ -97,6 +99,7 @@ const PassesChordView = () => {
                 const toPlayer = team.players.find(p => p.playerId === playerIds[d.target.index]);
                 const reverseFromPlayer = team.players.find(p => p.playerId === playerIds[d.target.index]);
                 const reverseToPlayer = team.players.find(p => p.playerId === playerIds[d.source.index]);
+
                 return `from ${fromPlayer.name} to ${toPlayer.name}, ${d.source.value} passes\nfrom ${reverseFromPlayer.name} to ${reverseToPlayer.name}, ${d.target.value} passes`;
             });
 
