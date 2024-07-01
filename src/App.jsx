@@ -49,9 +49,10 @@ function App() {
                     </div>
                 </div>
             )}
-            <div className="d-flex justify-content-center p-2">
-                <BackToTop />
-            </div>
+            {/*TODO: absolute positioning */}
+            {/*<div className="d-flex justify-content-center p-2">*/}
+            {/*    <BackToTop />*/}
+            {/*</div>*/}
         </>
     );
 }
