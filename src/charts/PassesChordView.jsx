@@ -67,6 +67,9 @@ const PassesChordView = () => {
         // Select the SVG container
         const svg = d3.select(chordRef.current);
 
+        // Clear existing elements
+        svg.selectAll("*").remove();
+
         // Render groups (arcs)
         svg.selectAll(".group")
             .data(chords.groups)
