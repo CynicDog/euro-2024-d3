@@ -1,29 +1,26 @@
-import {tree} from "d3-hierarchy";
+import { tree } from "d3-hierarchy";
 import * as d3 from "d3";
-import {link, curveBumpX} from "d3-shape";
-import {useEffect, useRef, useState} from "react";
-import ChartContainer from "../components/ChartContainer.jsx";
-import {useMatch, useTheme} from "../../Context.jsx";
+import { link, curveBumpX } from "d3-shape";
+import { useEffect, useRef } from "react";
+import { useMatch, useScale, useTheme } from "../../Context.jsx";
 
-const BracketView = ({root, detailViewRef}) => {
-
-    const {theme} = useTheme();
-    const {setMatch} = useMatch();
+const BracketView = ({ root, detailViewRef }) => {
+    const { theme } = useTheme();
+    const { scaledFontSize } = useScale();
+    const { setMatch } = useMatch();
 
     const width = 800;
-    const height = 450;
-    const margin = {top: 20, right: 100, bottom: 20, left: 100};
+    const height = 500;
+    const margin = { top: 20, right: 100, bottom: 20, left: 100 };
     const innerWidth = width - margin.left - margin.right;
     const innerHeight = height - margin.top - margin.bottom;
 
     const bracketRef = useRef();
 
     useEffect(() => {
-
         const bracketContainer = d3.select(bracketRef.current);
 
-        const treeLayoutGenerator = tree()
-            .size([innerHeight, innerWidth])(root);
+        const treeLayoutGenerator = tree().size([innerHeight, innerWidth])(root);
 
         const linkGenerator = link(curveBumpX)
             .x(d => innerWidth - d.y)
@@ -53,7 +50,7 @@ const BracketView = ({root, detailViewRef}) => {
             .attr("stroke", "gray")
             .attr("stroke-opacity", 0.6);
 
-        // Render labels first
+        // Render labels
         const labels = bracketContainer
             .selectAll(".bracket-label")
             .data(root.descendants())
@@ -64,8 +61,8 @@ const BracketView = ({root, detailViewRef}) => {
             .attr("text-anchor", "start")
             .attr("alignment-baseline", "middle")
             .style("font-weight", 100)
-            .style("fill", `${theme === 'light'? "black" :"white"}`)
-            .style("font-size", "10px")
+            .style("fill", `${theme === 'light' ? "black" : "white"}`)
+            .style("font-size", `${scaledFontSize}px`)
             .text(d => (d.data.team_1 !== "" ? `${d.data.team_1} vs. ${d.data.team_2}` : ""));
 
         // Measure text widths and set background widths
@@ -92,25 +89,19 @@ const BracketView = ({root, detailViewRef}) => {
             .style("cursor", "pointer")
             .on("click", (e, d) => {
                 // fetch clicked match data
-                d3.json(`src/data/${d.data.name}.json`)
-                    .then(data => setMatch(data))
+                d3.json(`src/data/${d.data.name}.json`).then(data => setMatch(data));
                 // scroll to detail view
                 if (detailViewRef.current) {
-                    detailViewRef.current.scrollIntoView({behavior: "smooth"});
+                    detailViewRef.current.scrollIntoView({ behavior: "smooth" });
                 }
             });
-    }, [root, theme]);
+    }, [root, theme, scaledFontSize]);
 
     return (
-        <>
-            <ChartContainer
-                width={width}
-                height={height}
-                margin={margin}>
-                <g ref={bracketRef}></g>
-            </ChartContainer>
-        </>
+        <svg viewBox={`0 0 ${width} ${height}`}>
+            <g ref={bracketRef} transform={`translate(${margin.left}, ${margin.top})`}></g>
+        </svg>
     );
-}
+};
 
 export default BracketView;

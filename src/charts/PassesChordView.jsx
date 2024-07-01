@@ -1,12 +1,10 @@
 import * as d3 from "d3";
 import { useEffect, useRef, useState } from "react";
-import ChartContainer from "../components/ChartContainer.jsx";
 import { useMatch } from "../../Context.jsx";
 
 const PassesChordView = () => {
-    const width = 640;
-    const height = 640;
-    const margin = { top: 0, right: 0, bottom: 0, left: 0 };
+    const width = 740;
+    const height = 740;
     const outerRadius = Math.min(width, height) * 0.5 - 30;
     const innerRadius = outerRadius - 20;
 
@@ -14,9 +12,7 @@ const PassesChordView = () => {
     const [team, setTeam] = useState(null);
 
     useEffect(() => {
-
         setTeam(match?.home);
-
     }, [match]);
 
     const handleTeamClick = selectedTeam => {
@@ -26,7 +22,6 @@ const PassesChordView = () => {
     const chordRef = useRef();
 
     useEffect(() => {
-
         if (!match) return;
 
         // Filter pass events for the selected team
@@ -75,7 +70,7 @@ const PassesChordView = () => {
             .join("path")
             .attr("class", "group")
             .attr("d", arc)
-            .attr("fill", (d, i) => d3.schemeCategory10[i % 10])
+            .attr("fill", (d, i) => d3.schemeSet3[i % 10])
             .append("title")
             .text(d => `Player: ${playerIds[d.index]}, Value: ${d.value}`);
 
@@ -85,9 +80,8 @@ const PassesChordView = () => {
             .join("path")
             .attr("class", "ribbon")
             .attr("d", ribbon)
-            .attr("fill", d => d3.schemeTableau10[d.target.index % 10])
+            .attr("fill", d => d3.schemeSet3[d.target.index % 10])
             .attr("opacity", 0.7)
-            .attr("width", "70%").attr("height", "70%")
             .append("title")
             .text(d => `From: ${playerIds[d.source.index]} to ${playerIds[d.target.index]}, Value: ${d.source.value}`);
 
@@ -95,14 +89,8 @@ const PassesChordView = () => {
 
     return (
         <div>
-            {match === null ? (
-                <div className="d-flex justify-content-center align-items-center vh-100">
-                    <div className="spinner-border" role="status">
-                        <span className="visually-hidden">Loading...</span>
-                    </div>
-                </div>
-            ) : (
-                <div>
+            {match !== null && (
+                <>
                     <div className="d-flex fs-5">
                         <span
                             className={`country-name ${team === match.home ? 'text-decoration-underline bg-primary-subtle' : 'bg-light-subtle'}`}
@@ -116,15 +104,15 @@ const PassesChordView = () => {
                             {match.away.countryName}
                         </span>
                     </div>
-                    <ChartContainer width={width} height={height} margin={margin}>
-                        <svg
-                            ref={chordRef}
-                            width={width}
-                            height={height}
-                            viewBox={`-${width / 2} -${height / 2} ${width} ${height}`}
-                        ></svg>
-                    </ChartContainer>
-                </div>
+                    {/* chart view */}
+                    <svg
+                        ref={chordRef}
+                        width="70%"
+                        height="70%"
+                        viewBox={`-${width / 2} -${height / 2} ${width} ${height}`}
+                        style={{ display: 'block', margin: '0 auto' }}
+                    ></svg>
+                </>
             )}
         </div>
     );

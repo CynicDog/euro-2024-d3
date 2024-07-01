@@ -44,7 +44,7 @@ function App() {
                     <div className="draw-section">
                         <BracketView root={bracket} detailViewRef={detailViewRef} />
                     </div>
-                    <div ref={detailViewRef}className="draw-section">
+                    <div ref={detailViewRef} className="draw-section pt-2">
                         <PassesChordView />
                     </div>
                 </div>
