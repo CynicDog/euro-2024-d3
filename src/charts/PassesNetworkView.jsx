@@ -1,4 +1,4 @@
-import { useMatch, useScale, useTheme } from "../../Context.jsx";
+import {useMatch, useScale, useTeam, useTheme} from "../../Context.jsx";
 import { useEffect, useRef, useState } from "react";
 import * as d3 from "d3";
 
@@ -13,7 +13,7 @@ const PassesNetworkView = () => {
     const { scaledFontSize } = useScale();
     const { match } = useMatch();
 
-    const [team, setTeam] = useState(null);
+    const { team, setTeam } = useTeam();
 
     useEffect(() => {
         setTeam(match?.home);
@@ -25,7 +25,6 @@ const PassesNetworkView = () => {
         }
     }, [match, team, theme, scaledFontSize]);
 
-    const networkViewContainerRev = useRef();
     const networkRef = useRef();
 
     const updateNetworkDiagram = (selectedTeam) => {
@@ -114,6 +113,8 @@ const PassesNetworkView = () => {
                         .attr("r", 0)
                         .attr("fill", d => colorScale(d.playerId))
                         .attr("opacity", 0.5)
+                        .attr("stroke", theme === "light"? "black" : "white")
+                        .attr("stroke-width", 0.3)
                         .call(enter => enter.transition(t)
                             .attr("r", 4)
                             .style("opacity", 0.6)
@@ -137,7 +138,9 @@ const PassesNetworkView = () => {
                         .attr("cy", d => yScale(d.x))
                         .attr("r", 0)
                         .attr("fill", d => colorScale(d.playerId))
-                        .attr("opacity", 0.5)
+                        .attr("opacity", 0.3)
+                        .attr("stroke", theme === "light"? "black" : "white")
+                        .attr("stroke-width", 0.3)
                         .call(enter => enter.transition(t)
                             .attr("r", 2)
                             .style("opacity", 0.4)
@@ -151,34 +154,10 @@ const PassesNetworkView = () => {
             );
     };
 
-    const handleTeamClick = selectedTeam => {
-        setTeam(selectedTeam);
-        if (match) {
-            updateNetworkDiagram(selectedTeam);
-        }
-
-        if (networkViewContainerRev.current) {
-            networkViewContainerRev.current.scrollIntoView({ behavior: "smooth" });
-        }
-    };
-
     return (
         <>
             {match !== null && (
-                <div ref={networkViewContainerRev} className="py-2">
-                    <div className="d-flex justify-content-start">
-                        <span
-                            className={`country-name ${team === match.home ? 'text-decoration-underline bg-danger-subtle' : 'bg-light-subtle'}`}
-                            onClick={() => handleTeamClick(match.home)}>
-                            {match.home.countryName}
-                        </span>
-                        <span className="px-1">vs.</span>
-                        <span
-                            className={`country-name ${team === match.away ? 'text-decoration-underline bg-danger-subtle' : 'bg-light-subtle'}`}
-                            onClick={() => handleTeamClick(match.away)}>
-                            {match.away.countryName}
-                        </span>
-                    </div>
+                <div className="py-2">
                     {/* Network view */}
                     <svg
                         ref={networkRef}

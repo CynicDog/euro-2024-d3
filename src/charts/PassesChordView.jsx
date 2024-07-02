@@ -1,6 +1,6 @@
 import * as d3 from "d3";
 import { useEffect, useRef, useState } from "react";
-import { useMatch, useScale, useTheme } from "../../Context.jsx";
+import {useMatch, useScale, useTeam, useTheme} from "../../Context.jsx";
 
 const PassesChordView = () => {
     const width = 700;
@@ -10,9 +10,9 @@ const PassesChordView = () => {
 
     const { theme } = useTheme();
     const { scaledFontSize } = useScale();
-    const { match } = useMatch();
 
-    const [team, setTeam] = useState(null);
+    const { match } = useMatch();
+    const { team, setTeam } = useTeam();
 
     useEffect(() => {
         setTeam(match?.home);
@@ -172,31 +172,11 @@ const PassesChordView = () => {
         }
     };
 
-    const handleTeamClick = selectedTeam => {
-        setTeam(selectedTeam);
-        if (match) {
-            updateChordDiagram(selectedTeam);
-        }
-    };
-
     return (
         <>
             {match !== null && (
                 <div ref={chordViewContainerRef} className="py-2">
-                    <div className="d-flex justify-content-end">
-                        <span
-                            className={`country-name ${team === match.home ? 'text-decoration-underline bg-primary-subtle' : 'bg-light-subtle'}`}
-                            onClick={() => handleTeamClick(match.home)}>
-                            {match.home.countryName}
-                        </span>
-                        <span className="px-1">vs.</span>
-                        <span
-                            className={`country-name ${team === match.away ? 'text-decoration-underline bg-primary-subtle' : 'bg-light-subtle'}`}
-                            onClick={() => handleTeamClick(match.away)}>
-                            {match.away.countryName}
-                        </span>
-                    </div>
-                    {/* Chart view */}
+                    {/* Chord chart view */}
                     <svg
                         ref={chordRef}
                         width="70%"
