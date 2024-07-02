@@ -7,6 +7,7 @@ import { JSONToHierarchy } from "./data/util.js";
 import PassesChordView from "./charts/PassesChordView.jsx";
 import BackToTop from "./components/BackToTop.jsx";
 import PassesNetworkView from "./charts/PassesNetworkView.jsx";
+import CountryEntry from "./components/CountryEntry.jsx";
 
 function App() {
 
@@ -44,6 +45,9 @@ function App() {
                     </div>
                     <div className="draw-section">
                         <BracketView root={bracket} />
+                    </div>
+                    <div className="mb-5">
+                        <CountryEntry />
                     </div>
                     <div className="draw-section">
                         <PassesChordView />

@@ -49,7 +49,6 @@ export const useLayout = () => useContext(LayoutContext);
 const ScaleContext = createContext();
 
 export const ScaleProvider = ({ children }) => {
-
     const fontSizeScale = d3.scaleLinear()
         .domain([600, 1200])
         .range([20, 12])
@@ -57,10 +56,24 @@ export const ScaleProvider = ({ children }) => {
 
     const [fontSize, setFontSize] = useState(fontSizeScale(window.innerWidth));
 
-    useEffect(() => {
-        const handleResize = () => {
-            setFontSize(fontSizeScale(window.innerWidth));
+    // Debounce on window resizing
+    const debounce = (func, wait) => {
+        let timeout;
+        return function() {
+            const context = this;
+            const args = arguments;
+            clearTimeout(timeout);
+            timeout = setTimeout(() => {
+                timeout = null;
+                func.apply(context, args);
+            }, wait);
         };
+    };
+
+    useEffect(() => {
+        const handleResize = debounce(() => {
+            setFontSize(fontSizeScale(window.innerWidth));
+        }, 300);
 
         window.addEventListener('resize', handleResize);
 
@@ -75,7 +88,6 @@ export const ScaleProvider = ({ children }) => {
         </ScaleContext.Provider>
     );
 };
-
 export const useScale = () => useContext(ScaleContext);
 
 // Match Provider
