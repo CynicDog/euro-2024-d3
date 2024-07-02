@@ -1,6 +1,6 @@
-import {useMatch, useScale, useTeam, useTheme} from "../../Context.jsx";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import * as d3 from "d3";
+import { useMatch, usePlayer, useScale, useTeam, useTheme } from "../../Context.jsx";
 
 const PassesNetworkView = ({ period }) => {
     const width = 500;
@@ -11,9 +11,10 @@ const PassesNetworkView = ({ period }) => {
 
     const { theme } = useTheme();
     const { scaledFontSize } = useScale();
-    const { match } = useMatch();
 
+    const { match } = useMatch();
     const { team, setTeam } = useTeam();
+    const { player } = usePlayer();
 
     useEffect(() => {
         setTeam(match?.home);
@@ -23,7 +24,7 @@ const PassesNetworkView = ({ period }) => {
         if (team) {
             updateNetworkDiagram(team);
         }
-    }, [match, team, theme, scaledFontSize]);
+    }, [match, team, player, theme, scaledFontSize]);
 
     const networkRef = useRef();
 
@@ -36,14 +37,15 @@ const PassesNetworkView = ({ period }) => {
         );
 
         // Extract nodes and edges spatial location
-        const startNodes = eventData.map(e => ({ x: e.x, y: e.y, playerId: e.playerId }));
-        const endNodes = eventData.map(e => ({ x: e.endX, y: e.endY, playerId: e.playerId }));
+        const startNodes = eventData.map(e => ({ x: e.x, y: e.y, playerId: e.playerId, period: period }));
+        const endNodes = eventData.map(e => ({ x: e.endX, y: e.endY, playerId: e.playerId, period: period }));
         const routes = eventData.map(e => ({
             x1: e.x,
             y1: e.y,
             x2: e.endX,
             y2: e.endY,
-            playerId: e.playerId
+            playerId: e.playerId,
+            period: period
         }));
 
         const playerIds = [...new Set(startNodes.map(d => d.playerId))];
@@ -69,10 +71,13 @@ const PassesNetworkView = ({ period }) => {
             .domain(playerIds)
             .range(d3.schemeSet3);
 
+        // Default opacity
+        const defaultOpacity = 0.5;
+
         // Transition
         const t = d3.transition()
             .duration(500)
-            .ease(d3.easeExpOut);
+            .ease(d3.easeSinInOut);
 
         // Append the lines to the SVG with transitions
         svg.selectAll(".route")
@@ -80,83 +85,62 @@ const PassesNetworkView = ({ period }) => {
             .join(
                 enter => enter
                     .append("line")
-                        .attr("class", "route")
-                        .attr("x1", d => xScale(d.y1))
-                        .attr("y1", d => yScale(d.x1))
-                        .attr("x2", d => xScale(d.y1))
-                        .attr("y2", d => yScale(d.x1))
-                        .attr("stroke", d => colorScale(d.playerId))
-                        .attr("stroke-width", .6)
-                        .attr("opacity", 0.3)
-                        .call(enter => enter
-                            // .transition(t.duration(800))
-                            .attr("x2", d => xScale(d.y2))
-                            .attr("y2", d => yScale(d.x2))
-                        ),
+                    .attr("class", "route")
+                    .attr("x1", d => xScale(d.y1))
+                    .attr("y1", d => yScale(d.x1))
+                    .attr("x2", d => xScale(d.y1))
+                    .attr("y2", d => yScale(d.x1))
+                    .attr("stroke", d => colorScale(d.playerId))
+                    .attr("stroke-width", .6)
+                    .attr("opacity", defaultOpacity)
+                    .call(enter => enter
+                        .attr("x2", d => xScale(d.y2))
+                        .attr("y2", d => yScale(d.x2))
+                    ),
                 update => update,
-                exit => exit.call(exit => exit
-                    // .transition(t)
-                    .attr("x2", d => xScale(d.x1))
-                    .attr("y2", d => yScale(d.y1))
-                    .style("opacity", 0)
-                    .remove()
-                )
+                exit => exit
             );
 
         // Append the start nodes to the SVG with transitions
         svg.selectAll(".start-node")
             .data(startNodes)
-            .join(
-                enter => enter
-                    .append("circle")
-                        .attr("class", "start-node")
-                        .attr("cx", d => xScale(d.y))
-                        .attr("cy", d => yScale(d.x))
-                        .attr("r", 0)
-                        .attr("fill", d => colorScale(d.playerId))
-                        .attr("opacity", 0.5)
-                        .attr("stroke", theme === "light"? "black" : "white")
-                        .attr("stroke-width", 0.3)
-                        .call(enter => enter
-                            // .transition(t)
-                            .attr("r", 4)
-                            .style("opacity", 0.6)
-                        ),
-                update => update,
-                exit => exit.call(exit => exit.transition(t)
-                    .attr("r", 0)
-                    .style("opacity", 0)
-                    .remove()
-                )
-            );
+            .join("circle")
+            .attr("class", "start-node")
+            .attr("cx", d => xScale(d.y))
+            .attr("cy", d => yScale(d.x))
+            .attr("r", 5)
+            .attr("fill", d => colorScale(d.playerId))
+            .attr("opacity", defaultOpacity)
+            .attr("stroke", theme === "light" ? "black" : "white")
+            .attr("stroke-width", 0.3);
 
         // Append the end nodes to the SVG with transitions
         svg.selectAll(".end-node")
             .data(endNodes)
-            .join(
-                enter => enter
-                    .append("circle")
-                        .attr("class", "end-node")
-                        .attr("cx", d => xScale(d.y))
-                        .attr("cy", d => yScale(d.x))
-                        .attr("r", 0)
-                        .attr("fill", d => colorScale(d.playerId))
-                        .attr("opacity", 0.3)
-                        .attr("stroke", theme === "light"? "black" : "white")
-                        .attr("stroke-width", 0.3)
-                        .call(enter => enter
-                            // .transition(t)
-                            .attr("r", 2)
-                            .style("opacity", 0.4)
-                        ),
-                update => update,
-                exit => exit.call(exit => exit
-                    // .transition(t)
-                    .attr("r", 0)
-                    .style("opacity", 0)
-                    .remove()
-                )
-            );
+            .join("circle")
+            .attr("class", "end-node")
+            .attr("cx", d => xScale(d.y))
+            .attr("cy", d => yScale(d.x))
+            .attr("r", 3)
+            .attr("fill", d => colorScale(d.playerId))
+            .attr("opacity", defaultOpacity)
+            .attr("stroke", theme === "light" ? "black" : "white")
+            .attr("stroke-width", 0.3);
+
+        // Highlight or dim based on selected player
+        if (player.id !== null && player.period !== null && player.period === period) {
+            svg.selectAll(".route")
+                .attr("stroke-width", 2)
+                .attr("opacity", d => (d.playerId === player.id) && (d.period === player.period) ? .6 : .1);
+
+            svg.selectAll(".start-node")
+                .attr("r", 6)
+                .attr("opacity", d => (d.playerId === player.id) && (d.period === player.period) ? .8 : .1);
+
+            svg.selectAll(".end-node")
+                .attr("r", 4)
+                .attr("opacity", d => (d.playerId === player.id) && (d.period === player.period) ? .6 : .1);
+        }
     };
 
     return (

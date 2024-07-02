@@ -115,5 +115,17 @@ export const TeamProvider = ({ children }) => {
         </TeamContext.Provider>
     )
 }
-
 export const useTeam = () => useContext(TeamContext);
+
+// Player Provider
+const PlayerContext = createContext();
+export const PlayerProvider = ({ children }) => {
+    const [player, setPlayer] = useState({ id: null, period: null });
+
+    return (
+        <PlayerContext.Provider value={{ player, setPlayer }}>
+            {children}
+        </PlayerContext.Provider>
+    )
+}
+export const usePlayer = () => useContext(PlayerContext);

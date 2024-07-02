@@ -1,6 +1,6 @@
 import * as d3 from "d3";
 import { useEffect, useRef } from "react";
-import {useMatch, useScale, useTeam, useTheme} from "../../Context.jsx";
+import {useMatch, usePlayer, useScale, useTeam, useTheme} from "../../Context.jsx";
 
 const PassesChordView = ({ period }) => {
     const width = 700;
@@ -13,6 +13,7 @@ const PassesChordView = ({ period }) => {
 
     const { match } = useMatch();
     const { team, setTeam } = useTeam();
+    const { setPlayer } = usePlayer();
 
     useEffect(() => {
         setTeam(match?.home);
@@ -81,6 +82,11 @@ const PassesChordView = ({ period }) => {
                 .attr("fill", (d, i) => d3.schemeSet3[i % 10])
                 // UI interaction
                 .on("mouseover", (event, d) => {
+
+                    // Register focused player id on global context
+                    const playerId = playerIds[d.index];
+                    setPlayer({ id: playerId, period: period });
+
                     // Find all associated indices based on ribbon connections
                     const associatedIndices = [];
 
@@ -98,39 +104,43 @@ const PassesChordView = ({ period }) => {
 
                     // Highlight ribbons associated with the selected chord
                     svg.selectAll(".ribbon")
-                        .transition()
-                        .duration(300)
+                        // .transition()
+                        // .duration(300)
                         .attr("opacity", ribbonData => {
                             return (ribbonData.source.index === d.index || ribbonData.target.index === d.index) ? 0.9 : 0.1;
                         });
 
                     // Adjust opacity for player labels associated with the selected chord
                     svg.selectAll(".player-label")
-                        .transition()
-                        .duration(300)
+                        // .transition()
+                        // .duration(300)
                         .attr("opacity", labelData => uniqueAssociatedIndices.includes(labelData.index) ? 1.0 : 0.1);
 
                     // Highlight the hovered chord
                     svg.selectAll(".group")
-                        .transition()
-                        .duration(300)
+                        // .transition()
+                        // .duration(300)
                         .attr("opacity", groupData => groupData.index === d.index ? 0.9 : 0.2);
                 })
                 // Reset highlights
                 .on("mouseout", () => {
+
+                    // Erase the globally registered player id
+                    setPlayer({ id: null, period: null });
+
                     svg.selectAll(".ribbon")
-                        .transition()
-                        .duration(200)
+                        // .transition()
+                        // .duration(200)
                         .attr("opacity", 0.7);
 
                     svg.selectAll(".group")
-                        .transition()
-                        .duration(200)
+                        // .transition()
+                        // .duration(200)
                         .attr("opacity", 1);
 
                     svg.selectAll(".player-label")
-                        .transition()
-                        .duration(200)
+                        // .transition()
+                        // .duration(200)
                         .attr("opacity", 1);
                 });
 

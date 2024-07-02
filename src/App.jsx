@@ -58,10 +58,10 @@ function App() {
                             </div>
                             <div className="row draw-section">
                                 <div className="col-lg-6">
-                                    <PassesChordView period={"FirstHalf"} />
+                                    <PassesNetworkView period={"FirstHalf"} />
                                 </div>
                                 <div className="col-lg-6">
-                                    <PassesNetworkView period={"FirstHalf"} />
+                                    <PassesChordView period={"FirstHalf"} />
                                 </div>
                             </div>
                             <div className="eb-garamond fs-3">
@@ -70,10 +70,10 @@ function App() {
                             </div>
                             <div className="row draw-section">
                                 <div className="col-lg-6">
-                                    <PassesChordView period={"SecondHalf"} />
+                                    <PassesNetworkView period={"SecondHalf"} />
                                 </div>
                                 <div className="col-lg-6">
-                                    <PassesNetworkView period={"SecondHalf"} />
+                                    <PassesChordView period={"SecondHalf"} />
                                 </div>
                             </div>
                         </>
