@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import {useEffect, useRef, useMemo, useCallback} from "react";
 import * as d3 from "d3";
 import { useMatch, usePlayer, useScale, useTeam, useTheme } from "../../Context.jsx";
 
@@ -12,136 +12,72 @@ const PassesNetworkView = ({ period }) => {
     const defaultOpacity = 0.5;
 
     const { theme } = useTheme();
-
     const { match } = useMatch();
     const { team, setTeam } = useTeam();
     const { player } = usePlayer();
+
+    const networkRef = useRef();
 
     useEffect(() => {
         setTeam(match?.home);
     }, [match]);
 
     useEffect(() => {
-        if (team) {
-            updateNetworkDiagram(team);
-        }
-    }, [match, team, theme]);
+        updateNetworkDiagram();
+    }, [match, team]);
 
     useEffect(() => {
         highlightPlayerPassRoutes();
     }, [player]);
 
-    const networkRef = useRef();
+    const eventData = useMemo(() => {
+        if (!match || !team) return [];
 
-    const updateNetworkDiagram = (selectedTeam) => {
-        if (!match) return;
-
-        // Filter pass events for the selected team
-        const eventData = match.events.filter(
-            e => e.teamId === selectedTeam?.teamId && e.type.displayName === "Pass" && e.period.displayName === period
+        return match.events.filter(
+            e => e.teamId === team.teamId && e.type.displayName === "Pass" && e.period.displayName === period
         );
+    }, [match, team, period]);
 
-        // Extract nodes and edges spatial location
-        const startNodes = eventData.map(e => ({ x: e.x, y: e.y, playerId: e.playerId, period: period }));
-        const endNodes = eventData.map(e => ({ x: e.endX, y: e.endY, playerId: e.playerId, period: period }));
-        const routes = eventData.map(e => ({
-            x1: e.x,
-            y1: e.y,
-            x2: e.endX,
-            y2: e.endY,
-            playerId: e.playerId,
-            period: period
+    const playerIds = useMemo(() => {
+        return [...new Set(eventData.map(e => e.playerId))];
+    }, [eventData]);
+
+    const startNodes = useMemo(() => {
+        return eventData.map(e => ({ x: e.x, y: e.y, playerId: e.playerId, period: period }));
+    }, [eventData, period]);
+
+    const endNodes = useMemo(() => {
+        return eventData.map(e => ({ x: e.endX, y: e.endY, playerId: e.playerId, period: period }));
+    }, [eventData, period]);
+
+    const routes = useMemo(() => {
+        return eventData.map(e => ({
+            x1: e.x, y1: e.y, x2: e.endX, y2: e.endY, playerId: e.playerId, period: period
         }));
+    }, [eventData, period]);
 
-        const playerIds = [...new Set(startNodes.map(d => d.playerId))];
+    const updateNetworkDiagram = () => {
+        let svg = d3.select(networkRef.current).select("g");
 
-        // Clear existing nodes
-        d3.select(networkRef.current).selectAll("*").remove();
+        if (svg.empty()) {
+            svg = d3.select(networkRef.current)
+                .append("g")
+                .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
-        // Create the SVG container
-        const svg = d3.select(networkRef.current)
-            .append("g")
-            .attr("transform", `translate(${margin.left}, ${margin.top})`);
+            svg.append("defs").append("marker")
+                .attr("id", "arrowhead")
+                .attr("viewBox", "0 0 10 10")
+                .attr("refX", 8)
+                .attr("refY", 5)
+                .attr("markerWidth", 9)
+                .attr("markerHeight", 9)
+                .attr("orient", "auto-start-reverse")
+                .append("path")
+                .attr("d", "M 0 0 L 10 5 L 0 10 z")
+                .attr("fill", "gray");
 
-        // Set up scales
-        const xScale = d3.scaleLinear()
-            .domain([0, 100])
-            .range([0, innerWidth]);
-
-        const yScale = d3.scaleLinear()
-            .domain([0, 100])
-            .range([innerHeight, 0]);
-
-        const colorScale = d3.scaleOrdinal()
-            .domain(playerIds)
-            .range(d3.schemeSet3);
-
-        // Append the lines to the SVG
-        const lines = svg.selectAll(`.route-${period}`)
-            .data(routes, d => `${d.playerId}-${d.period}-${d.x1}-${d.y1}-${d.x2}-${d.y2}`);
-
-        lines.join("line")
-                .attr("class", `route-${period}`)
-                .attr("x1", d => xScale(d.y1))
-                .attr("y1", d => yScale(d.x1))
-                .attr("x2", d => xScale(d.y1))
-                .attr("y2", d => yScale(d.x1))
-                .attr("stroke", d => colorScale(d.playerId))
-                .attr("stroke-width", .6)
-                .attr("opacity", defaultOpacity)
-                .attr("x2", d => xScale(d.y2))
-                .attr("y2", d => yScale(d.x2));
-
-        lines.exit().remove();
-
-        // Append the start nodes to the SVG
-        const startCircles = svg.selectAll(`.start-node-${period}`)
-            .data(startNodes, d => `${d.playerId}-${d.period}-${d.x}-${d.y}`);
-
-        startCircles.join("circle")
-                .attr("class", `start-node-${period}`)
-                .attr("cx", d => xScale(d.y))
-                .attr("cy", d => yScale(d.x))
-                .attr("r", 5)
-                .attr("fill", d => colorScale(d.playerId))
-                .attr("opacity", defaultOpacity)
-                .attr("stroke", theme === "light" ? "black" : "white")
-                .attr("stroke-width", 0.3);
-
-        startCircles.exit().remove();
-
-        // Append the end nodes to the SVG
-        const endCircles = svg.selectAll(`.end-node-${period}`)
-            .data(endNodes, d => `${d.playerId}-${d.period}-${d.x}-${d.y}`);
-
-        endCircles.join("circle")
-            .attr("class", `end-node-${period}`)
-                .attr("cx", d => xScale(d.y))
-                .attr("cy", d => yScale(d.x))
-                .attr("r", 3)
-                .attr("fill", d => colorScale(d.playerId))
-                .attr("opacity", defaultOpacity)
-                .attr("stroke", theme === "light" ? "black" : "white")
-                .attr("stroke-width", 0.3);
-
-        endCircles.exit().remove();
-
-        // Add arrowhead marker definition
-        svg.append("defs").append("marker")
-            .attr("id", "arrowhead")
-            .attr("viewBox", "0 0 10 10")
-            .attr("refX", 8)
-            .attr("refY", 5)
-            .attr("markerWidth", 9)
-            .attr("markerHeight", 9)
-            .attr("orient", "auto-start-reverse")
-            .append("path")
-            .attr("d", "M 0 0 L 10 5 L 0 10 z")
-            .attr("fill", "gray");
-
-        // Append the directional line with arrowhead
-        svg.append("line")
-            .attr("class", "direction-line")
+            svg.append("line")
+                .attr("class", "direction-line")
                 .attr("x1", innerWidth + 40)
                 .attr("y1", innerHeight - 50)
                 .attr("x2", innerWidth + 40)
@@ -151,9 +87,8 @@ const PassesNetworkView = ({ period }) => {
                 .attr("stroke-dasharray", "5,5")
                 .attr("marker-end", "url(#arrowhead)");
 
-        // Add text label for the direction
-        svg.append("text")
-            .attr("class", "direction-label")
+            svg.append("text")
+                .attr("class", "direction-label")
                 .attr("x", innerWidth + 150)
                 .attr("y", innerHeight / 2)
                 .attr("text-anchor", "start")
@@ -161,26 +96,65 @@ const PassesNetworkView = ({ period }) => {
                 .attr("fill", "gray")
                 .attr("transform", `rotate(90, ${innerWidth + 50}, ${innerHeight / 2})`)
                 .text("Direction");
-    };
+        }
+
+        const xScale = d3.scaleLinear().domain([0, 100]).range([0, innerWidth]);
+        const yScale = d3.scaleLinear().domain([0, 100]).range([innerHeight, 0]);
+        const colorScale = d3.scaleOrdinal().domain(playerIds).range(d3.schemeSet3);
+
+        svg.selectAll(`.route-${period}`)
+            .data(routes, d => `${d.playerId}-${d.period}-${d.x1}-${d.y1}-${d.x2}-${d.y2}`)
+            .join("line")
+            .attr("class", `route-${period}`)
+            .attr("x1", d => xScale(d.y1))
+            .attr("y1", d => yScale(d.x1))
+            .attr("x2", d => xScale(d.y2))
+            .attr("y2", d => yScale(d.x2))
+            .attr("stroke", d => colorScale(d.playerId))
+            .attr("stroke-width", 0.6)
+            .attr("opacity", defaultOpacity);
+
+        svg.selectAll(`.start-node-${period}`)
+            .data(startNodes, d => `${d.playerId}-${d.period}-${d.x}-${d.y}`)
+            .join("circle")
+            .attr("class", `start-node-${period}`)
+            .attr("cx", d => xScale(d.y))
+            .attr("cy", d => yScale(d.x))
+            .attr("r", 5)
+            .attr("fill", d => colorScale(d.playerId))
+            .attr("opacity", defaultOpacity)
+            .attr("stroke", theme === "light" ? "black" : "white")
+            .attr("stroke-width", 0.3);
+
+        svg.selectAll(`.end-node-${period}`)
+            .data(endNodes, d => `${d.playerId}-${d.period}-${d.x}-${d.y}`)
+            .join("circle")
+            .attr("class", `end-node-${period}`)
+            .attr("cx", d => xScale(d.y))
+            .attr("cy", d => yScale(d.x))
+            .attr("r", 3)
+            .attr("fill", d => colorScale(d.playerId))
+            .attr("opacity", defaultOpacity)
+            .attr("stroke", theme === "light" ? "black" : "white")
+            .attr("stroke-width", 0.3);
+    }
 
     const highlightPlayerPassRoutes = () => {
-
-        // Highlight or dim based on selected player
-        if (player.id !== null && player.period !== null && player.period === period) {
+        if (player.id !== null && player.period === period) {
             d3.selectAll(`.route-${period}`)
                 .attr("stroke-width", 2)
-                .attr("opacity", d => (d.playerId === player.id) && (d.period === player.period) ? .6 : .1);
+                .attr("opacity", d => d.playerId === player.id ? 0.6 : 0.1);
 
             d3.selectAll(`.start-node-${period}`)
                 .attr("r", 6)
-                .attr("opacity", d => (d.playerId === player.id) && (d.period === player.period) ? .8 : .1);
+                .attr("opacity", d => d.playerId === player.id ? 0.8 : 0.1);
 
             d3.selectAll(`.end-node-${period}`)
                 .attr("r", 4)
-                .attr("opacity", d => (d.playerId === player.id) && (d.period === player.period) ? .6 : .1);
+                .attr("opacity", d => d.playerId === player.id ? 0.6 : 0.1);
         } else {
             d3.selectAll(`.route-${period}`)
-                .attr("stroke-width", .6)
+                .attr("stroke-width", 0.6)
                 .attr("opacity", defaultOpacity);
 
             d3.selectAll(`.start-node-${period}`)
@@ -197,7 +171,6 @@ const PassesNetworkView = ({ period }) => {
         <>
             {match !== null && (
                 <div className="py-2">
-                    {/* Network view */}
                     <svg
                         ref={networkRef}
                         width="80%"
