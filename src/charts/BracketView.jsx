@@ -90,6 +90,11 @@ const BracketView = ({ root }) => {
                 .on("click", (e, d) => {
                     // fetch clicked match data
                     d3.json(`src/data/${d.data.name}.json`).then(data => setMatch(data));
+
+                    const countryEntrySection = document.getElementById("country-entry")
+                    if (countryEntrySection) {
+                        countryEntrySection.scrollIntoView({ behavior: "smooth"});
+                    }
                 });
     }, [root, theme, scaledFontSize]);
 

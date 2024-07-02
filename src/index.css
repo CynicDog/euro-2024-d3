@@ -1,5 +1,10 @@
-.underscore {
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&display=swap');
 
+.eb-garamond {
+  font-family: "EB Garamond", serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
 }
 
 /* Responsive container of the svg element */
@@ -14,7 +19,8 @@
 }
 
 .draw-section {
-  margin-bottom: 60px;
+  margin-top: 10px;
+  margin-bottom: 80px;
 }
 
 .country-name {

@@ -2,7 +2,7 @@ import {useMatch, useScale, useTeam, useTheme} from "../../Context.jsx";
 import { useEffect, useRef, useState } from "react";
 import * as d3 from "d3";
 
-const PassesNetworkView = () => {
+const PassesNetworkView = ({ period }) => {
     const width = 500;
     const height = 500;
     const margin = { top: 30, right: 80, bottom: 30, left: 80 };
@@ -32,7 +32,7 @@ const PassesNetworkView = () => {
 
         // Filter pass events for the selected team
         const eventData = match.events.filter(
-            e => e.teamId === selectedTeam?.teamId && e.type.displayName === "Pass" && e.period.displayName === "FirstHalf"
+            e => e.teamId === selectedTeam?.teamId && e.type.displayName === "Pass" && e.period.displayName === period
         );
 
         // Extract nodes and edges spatial location
@@ -88,12 +88,14 @@ const PassesNetworkView = () => {
                         .attr("stroke", d => colorScale(d.playerId))
                         .attr("stroke-width", .6)
                         .attr("opacity", 0.3)
-                        .call(enter => enter.transition(t.duration(800))
+                        .call(enter => enter
+                            // .transition(t.duration(800))
                             .attr("x2", d => xScale(d.y2))
                             .attr("y2", d => yScale(d.x2))
                         ),
                 update => update,
-                exit => exit.call(exit => exit.transition(t)
+                exit => exit.call(exit => exit
+                    // .transition(t)
                     .attr("x2", d => xScale(d.x1))
                     .attr("y2", d => yScale(d.y1))
                     .style("opacity", 0)
@@ -115,7 +117,8 @@ const PassesNetworkView = () => {
                         .attr("opacity", 0.5)
                         .attr("stroke", theme === "light"? "black" : "white")
                         .attr("stroke-width", 0.3)
-                        .call(enter => enter.transition(t)
+                        .call(enter => enter
+                            // .transition(t)
                             .attr("r", 4)
                             .style("opacity", 0.6)
                         ),
@@ -141,12 +144,14 @@ const PassesNetworkView = () => {
                         .attr("opacity", 0.3)
                         .attr("stroke", theme === "light"? "black" : "white")
                         .attr("stroke-width", 0.3)
-                        .call(enter => enter.transition(t)
+                        .call(enter => enter
+                            // .transition(t)
                             .attr("r", 2)
                             .style("opacity", 0.4)
                         ),
                 update => update,
-                exit => exit.call(exit => exit.transition(t)
+                exit => exit.call(exit => exit
+                    // .transition(t)
                     .attr("r", 0)
                     .style("opacity", 0)
                     .remove()

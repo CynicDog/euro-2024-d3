@@ -8,13 +8,14 @@ import PassesChordView from "./charts/PassesChordView.jsx";
 import BackToTop from "./components/BackToTop.jsx";
 import PassesNetworkView from "./charts/PassesNetworkView.jsx";
 import CountryEntry from "./components/CountryEntry.jsx";
+import {useMatch} from "../Context.jsx";
 
 function App() {
 
     const [bracket, setBracket] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    const detailViewRef = useRef(null); // Add a ref for the detail view section
+    const { match } = useMatch();
 
     useEffect(() => {
         d3.json('src/data/bracket.json')
@@ -46,15 +47,37 @@ function App() {
                     <div className="draw-section">
                         <BracketView root={bracket} />
                     </div>
-                    <div className="mb-5">
-                        <CountryEntry />
-                    </div>
-                    <div className="draw-section">
-                        <PassesChordView />
-                    </div>
-                    <div className="draw-section">
-                        <PassesNetworkView />
-                    </div>
+                    { match !== null && (
+                        <>
+                            <div className="mb-5">
+                                <CountryEntry />
+                            </div>
+                            <div className="eb-garamond fs-3">
+                                First Half
+                                <hr className="my-3"/>
+                            </div>
+                            <div className="row draw-section">
+                                <div className="col-lg-6">
+                                    <PassesChordView period={"FirstHalf"} />
+                                </div>
+                                <div className="col-lg-6">
+                                    <PassesNetworkView period={"FirstHalf"} />
+                                </div>
+                            </div>
+                            <div className="eb-garamond fs-3">
+                                Second Half
+                                <hr className="my-3"/>
+                            </div>
+                            <div className="row draw-section">
+                                <div className="col-lg-6">
+                                    <PassesChordView period={"SecondHalf"} />
+                                </div>
+                                <div className="col-lg-6">
+                                    <PassesNetworkView period={"SecondHalf"} />
+                                </div>
+                            </div>
+                        </>
+                    )}
                 </div>
             )}
             {/*TODO: absolute positioning */}

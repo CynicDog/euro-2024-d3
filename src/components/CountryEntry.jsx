@@ -7,14 +7,19 @@ const CountryEntry = () => {
 
     const handleTeamClick = selectedTeam => {
         setTeam(selectedTeam);
+
+        const countryEntrySection = document.getElementById("country-entry")
+        if (countryEntrySection) {
+            countryEntrySection.scrollIntoView({ behavior: "smooth"});
+        }
     };
 
     return (
         <>
             {match !== null && (
-                <>
-                    <div className="d-flex justify-content-between">
-                        <div className="mx-auto">
+                <div id="country-entry">
+                    <div className="d-flex justify-content-between pt-2">
+                        <div className="mx-auto eb-garamond fs-5">
                             <span
                                 className={`country-name ${team === match.home ? 'text-decoration-underline bg-primary-subtle' : 'bg-light-subtle'}`}
                                 onClick={() => handleTeamClick(match.home)}>
@@ -28,7 +33,7 @@ const CountryEntry = () => {
                             </span>
                         </div>
                     </div>
-                </>
+                </div>
             )}
         </>
     );

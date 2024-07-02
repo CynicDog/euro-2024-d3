@@ -1,8 +1,8 @@
 import * as d3 from "d3";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import {useMatch, useScale, useTeam, useTheme} from "../../Context.jsx";
 
-const PassesChordView = () => {
+const PassesChordView = ({ period }) => {
     const width = 700;
     const height = 700;
     const outerRadius = Math.min(width, height) * 0.5 - 100;
@@ -24,7 +24,6 @@ const PassesChordView = () => {
         }
     }, [match, team, theme, scaledFontSize]);
 
-    const chordViewContainerRef = useRef();
     const chordRef = useRef();
 
     const updateChordDiagram = (selectedTeam) => {
@@ -32,7 +31,7 @@ const PassesChordView = () => {
 
         // Filter pass events for the selected team
         const eventData = match.events.filter(
-            e => e.teamId === selectedTeam?.teamId && e.type.displayName === "Pass"
+            e => e.teamId === selectedTeam?.teamId && e.type.displayName === "Pass" && e.period.displayName === period
         );
 
         // Extract unique player IDs involved in passes
@@ -165,22 +164,17 @@ const PassesChordView = () => {
                     const lastName = fullName.split(" ").pop();
                     return lastName;
                 });
-
-
-        if (chordViewContainerRef.current) {
-            chordViewContainerRef.current.scrollIntoView({ behavior: "smooth" });
-        }
     };
 
     return (
         <>
             {match !== null && (
-                <div ref={chordViewContainerRef} className="py-2">
+                <div className="py-2">
                     {/* Chord chart view */}
                     <svg
                         ref={chordRef}
-                        width="70%"
-                        height="70%"
+                        width="80%"
+                        height="80%"
                         viewBox={`-${width / 2} -${height / 2} ${width} ${height}`}
                         style={{ display: 'block', margin: '0 auto' }}
                     ></svg>
