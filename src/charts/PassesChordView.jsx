@@ -24,6 +24,7 @@ const PassesChordView = () => {
         }
     }, [match, team, theme, scaledFontSize]);
 
+    const chordViewContainerRef = useRef();
     const chordRef = useRef();
 
     const updateChordDiagram = (selectedTeam) => {
@@ -165,8 +166,9 @@ const PassesChordView = () => {
                     return lastName;
                 });
 
-        if (chordRef.current) {
-            chordRef.current.scrollIntoView({ behavior: "smooth" });
+
+        if (chordViewContainerRef.current) {
+            chordViewContainerRef.current.scrollIntoView({ behavior: "smooth" });
         }
     };
 
@@ -178,9 +180,9 @@ const PassesChordView = () => {
     };
 
     return (
-        <div>
+        <>
             {match !== null && (
-                <>
+                <div ref={chordViewContainerRef} className="py-2">
                     <div className="d-flex justify-content-end">
                         <span
                             className={`country-name ${team === match.home ? 'text-decoration-underline bg-primary-subtle' : 'bg-light-subtle'}`}
@@ -202,9 +204,9 @@ const PassesChordView = () => {
                         viewBox={`-${width / 2} -${height / 2} ${width} ${height}`}
                         style={{ display: 'block', margin: '0 auto' }}
                     ></svg>
-                </>
+                </div>
             )}
-        </div>
+        </>
     );
 };
 

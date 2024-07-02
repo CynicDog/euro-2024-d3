@@ -91,3 +91,17 @@ export const MatchProvider = ({ children }) => {
     )
 }
 export const useMatch = () => useContext(MatchContext);
+
+// Team Provider
+const TeamContext = createContext();
+export const TeamProvider = ({ children }) => {
+    const [team, setTeam] = useState(null);
+
+    return (
+        <TeamContext.Provider value={{ team, setTeam}}>
+            {children}
+        </TeamContext.Provider>
+    )
+}
+
+export const useTeam = () => useContext(TeamContext);
