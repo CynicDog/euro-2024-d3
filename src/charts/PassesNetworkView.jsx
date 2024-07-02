@@ -141,6 +141,42 @@ const PassesNetworkView = ({ period }) => {
                 .attr("r", 4)
                 .attr("opacity", d => (d.playerId === player.id) && (d.period === player.period) ? .6 : .1);
         }
+
+        // Add arrowhead marker definition
+        svg.append("defs").append("marker")
+            .attr("id", "arrowhead")
+            .attr("viewBox", "0 0 10 10")
+            .attr("refX", 8)
+            .attr("refY", 5)
+            .attr("markerWidth", 9)
+            .attr("markerHeight", 9)
+            .attr("orient", "auto-start-reverse")
+            .append("path")
+            .attr("d", "M 0 0 L 10 5 L 0 10 z")
+            .attr("fill", "gray");
+
+        // Append the directional line with arrowhead
+        svg.append("line")
+            .attr("class", "direction-line")
+            .attr("x1", innerWidth + 40)
+            .attr("y1", innerHeight - 50)
+            .attr("x2", innerWidth + 40)
+            .attr("y2", 230)
+            .attr("stroke", "gray")
+            .attr("stroke-width", 1)
+            .attr("stroke-dasharray", "5,5")
+            .attr("marker-end", "url(#arrowhead)");
+
+        // Add text label for the direction
+        svg.append("text")
+            .attr("class", "direction-label")
+            .attr("x", innerWidth + 150)
+            .attr("y", innerHeight / 2)
+            .attr("text-anchor", "start")
+            .attr("alignment-baseline", "middle")
+            .attr("fill", "gray")
+            .attr("transform", `rotate(90, ${innerWidth + 50}, ${innerHeight / 2})`)
+            .text("Direction");
     };
 
     return (
