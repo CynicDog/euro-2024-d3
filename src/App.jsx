@@ -6,6 +6,7 @@ import BracketView from "./charts/BracketView.jsx";
 import { JSONToHierarchy } from "./data/util.js";
 import PassesChordView from "./charts/PassesChordView.jsx";
 import BackToTop from "./components/BackToTop.jsx";
+import PassesNetworkView from "./charts/PassesNetworkView.jsx";
 
 function App() {
 
@@ -44,8 +45,11 @@ function App() {
                     <div className="draw-section">
                         <BracketView root={bracket} />
                     </div>
-                    <div ref={detailViewRef} className="draw-section pt-2">
+                    <div className="draw-section">
                         <PassesChordView />
+                    </div>
+                    <div className="draw-section">
+                        <PassesNetworkView />
                     </div>
                 </div>
             )}

@@ -18,18 +18,20 @@ const PassesChordView = () => {
         setTeam(match?.home);
     }, [match]);
 
-    const handleTeamClick = selectedTeam => {
-        setTeam(selectedTeam);
-    };
+    useEffect(() => {
+        if (team && match) {
+            updateChordDiagram(team);
+        }
+    }, [match, team, theme, scaledFontSize]);
 
     const chordRef = useRef();
 
-    useEffect(() => {
+    const updateChordDiagram = (selectedTeam) => {
         if (!match) return;
 
         // Filter pass events for the selected team
         const eventData = match.events.filter(
-            e => e.teamId === team?.teamId && e.type.displayName === "Pass"
+            e => e.teamId === selectedTeam?.teamId && e.type.displayName === "Pass"
         );
 
         // Extract unique player IDs involved in passes
@@ -130,11 +132,6 @@ const PassesChordView = () => {
                         .transition()
                         .duration(200)
                         .attr("opacity", 1);
-                })
-                .append("title")
-                .text(d => {
-                    const player = team.players.find(p => p.playerId === playerIds[d.index]);
-                    return `${player.name}, total ${d.value} passes`;
                 });
 
         // Render ribbons (chords)
@@ -144,13 +141,7 @@ const PassesChordView = () => {
                 .attr("class", "ribbon")
                 .attr("d", ribbon)
                 .attr("fill", d => d3.schemeSet3[d.target.index % 10])
-                .attr("opacity", 0.7)
-                .append("title")
-                .text(d => {
-                    const sourcePlayer = team.players.find(p => p.playerId === playerIds[d.source.index]);
-                    const targetPlayer = team.players.find(p => p.playerId === playerIds[d.target.index]);
-                    return `From ${sourcePlayer.name} to ${targetPlayer.name}, ${d.source.value} passes\nFrom ${targetPlayer.name} to ${sourcePlayer.name}, ${d.target.value} passes`;
-                });
+                .attr("opacity", 0.7);
 
         // Render text labels around the arcs
         svg.selectAll(".player-label")
@@ -160,10 +151,10 @@ const PassesChordView = () => {
                 .attr("transform", d => {
                     d.angle = (d.startAngle + d.endAngle) / 2;
                     return `
-                            rotate(${(d.angle * 180 / Math.PI - 91)})
-                            translate(${outerRadius + 10})
-                            ${d.angle > Math.PI ? "rotate(180)" : ""}
-                        `;
+                                rotate(${(d.angle * 180 / Math.PI - 91)})
+                                translate(${outerRadius + 10})
+                                ${d.angle > Math.PI ? "rotate(180)" : ""}
+                            `;
                 })
                 .attr("text-anchor", d => d.angle > Math.PI ? "end" : null)
                 .attr("fill", theme === 'light' ? "black" : "white")
@@ -174,11 +165,17 @@ const PassesChordView = () => {
                     return lastName;
                 });
 
-        // Scroll to chord view
         if (chordRef.current) {
             chordRef.current.scrollIntoView({ behavior: "smooth" });
         }
-    }, [match, team, theme, scaledFontSize]);
+    };
+
+    const handleTeamClick = selectedTeam => {
+        setTeam(selectedTeam);
+        if (match) {
+            updateChordDiagram(selectedTeam);
+        }
+    };
 
     return (
         <div>
