@@ -9,8 +9,6 @@ const Round = ({ title, selectedMatch, matches, setMatch }) => (
         </div>
         <hr />
         {matches.map((r, index) => {
-            console.log("r", r);
-            console.log("selectedMatch", selectedMatch)
             return (
             <div
                 key={index}
