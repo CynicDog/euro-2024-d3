@@ -11,8 +11,8 @@ import GitHub from "../public/GitHub.jsx";
 
 function App() {
 
-    const { theme } = useTheme();
-    const { match } = useMatch();
+    const {theme} = useTheme();
+    const {match} = useMatch();
 
     const [rounds, setRounds] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -39,7 +39,8 @@ function App() {
             ) : (
                 <div className="container p-3 fw-lighter">
                     <div className="d-flex justify-content-end">
-                        <a className={`link-underline-opacity-0 eb-garamond fw-lighter ${theme === 'light' ? "link-dark": "link-light"}`} href="https://cynicdog.github.io">
+                        <a className={`link-underline-opacity-0 eb-garamond fw-lighter ${theme === 'light' ? "link-dark" : "link-light"}`}
+                           href="https://cynicdog.github.io">
                             back to blog
                         </a>
                     </div>
@@ -57,44 +58,55 @@ function App() {
                         </div>
                         <div className="col-lg-9">
                             {match !== null && (
-                              <>
-                                  <div className="mb-5">
-                                      <CountryEntry/>
-                                  </div>
-                                  <div className="eb-garamond fs-3">
-                                      First Half
-                                      <hr className="my-3"/>
-                                  </div>
-                                  <div className="row draw-section">
-                                      <div className="col-lg-6">
-                                          <PassesNetworkView period={"FirstHalf"}/>
-                                      </div>
-                                      <div className="col-lg-6">
-                                          <PassesChordView period={"FirstHalf"}/>
-                                      </div>
-                                  </div>
-                                  <div className="eb-garamond fs-3">
-                                      Second Half
-                                      <hr className="my-3"/>
-                                  </div>
-                                  <div className="row draw-section">
-                                      <div className="col-lg-6">
-                                          <PassesNetworkView period={"SecondHalf"}/>
-                                      </div>
-                                      <div className="col-lg-6">
-                                          <PassesChordView period={"SecondHalf"}/>
-                                      </div>
-                                  </div>
-                              </>
+                                <>
+                                    <div className="mb-5">
+                                        <CountryEntry/>
+                                    </div>
+                                    <div className="eb-garamond fs-3">
+                                        First Half
+                                        <hr className="my-3"/>
+                                    </div>
+                                    <div className="row draw-section">
+                                        <div className="col-lg-6">
+                                            <PassesNetworkView period={"FirstHalf"}/>
+                                        </div>
+                                        <div className="col-lg-6">
+                                            <PassesChordView period={"FirstHalf"}/>
+                                        </div>
+                                    </div>
+                                    <div className="eb-garamond fs-3">
+                                        Second Half
+                                        <hr className="my-3"/>
+                                    </div>
+                                    <div className="row draw-section">
+                                        <div className="col-lg-6">
+                                            <PassesNetworkView period={"SecondHalf"}/>
+                                        </div>
+                                        <div className="col-lg-6">
+                                            <PassesChordView period={"SecondHalf"}/>
+                                        </div>
+                                    </div>
+                                </>
                             )}
                         </div>
                     </div>
-                    <div className="d-flex justify-content-center align-items-center text-secondary mt-5">
+                    <div
+                        className="d-flex justify-content-center align-items-center text-secondary mt-3"
+                        style={{
+                            position: "absolute",
+                            bottom: "5px",
+                            left: "50%",
+                            transform: "translateX(-50%)",
+                            width: "100%",
+                            textAlign: "center"
+                        }}>
                         <span
                             className="me-2"
                             style={{cursor: "pointer"}}
-                            onClick={() => window.location.href="https://github.com/CynicDog/euro-2024-d3"}>Code on GitHub</span>
-                        <GitHub />
+                            onClick={() => window.location.href = "https://github.com/CynicDog/euro-2024-d3"}>
+                            Code on GitHub
+                        </span>
+                        <GitHub/>
                     </div>
                 </div>
             )}
