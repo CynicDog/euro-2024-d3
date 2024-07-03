@@ -14,7 +14,7 @@ const Round = ({ title, selectedMatch, matches, setMatch }) => (
                 key={index}
                 className={`filter-btn merriweather-light my-2 ${selectedMatch && selectedMatch.name === r.name ? 'fw-bold fs-5' : ''}`}
                 onClick={() => {
-                    d3.json(`src/data/${r.name}.json`).then(data => setMatch(data));
+                    d3.json(`https://raw.githubusercontent.com/CynicDog/euro-2024-d3/main/src/data/${r.name}.json`).then(data => setMatch(data));
                 }}>
                 {r.team_1} vs. {r.team_2}
             </div>

@@ -97,7 +97,7 @@ export const MatchProvider = ({ children }) => {
     const [match, setMatch] = useState(null);
 
     useEffect(() => {
-        d3.json(`src/data/round-of-sixteen-1-1-1.json`)
+        d3.json(`https://raw.githubusercontent.com/CynicDog/euro-2024-d3/main/src/data/round-of-sixteen-1-1-1.json`)
             .then(data => setMatch(data));
     }, []);
 

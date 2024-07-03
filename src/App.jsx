@@ -17,7 +17,7 @@ function App() {
     const {match} = useMatch();
 
     useEffect(() => {
-        d3.json('src/data/rounds.json')
+        d3.json('https://raw.githubusercontent.com/CynicDog/euro-2024-d3/main/src/data/rounds.json')
             .then(data => {
                 setRounds(data);
                 setLoading(false);
