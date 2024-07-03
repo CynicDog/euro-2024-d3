@@ -39,7 +39,7 @@ function App() {
             ) : (
                 <div className="container p-3 fw-lighter">
                     <div className="d-flex justify-content-end">
-                        <a className={`link-underline-opacity-0 fw-lighter ${theme === 'light' ? "link-dark": "link-light"}`} href="https://cynicdog.github.io">
+                        <a className={`link-underline-opacity-0 eb-garamond fw-lighter ${theme === 'light' ? "link-dark": "link-light"}`} href="https://cynicdog.github.io">
                             back to blog
                         </a>
                     </div>
