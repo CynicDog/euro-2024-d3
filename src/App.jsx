@@ -29,7 +29,7 @@ function App() {
     }, []);
 
     return (
-        <>
+        <div className="app-container d-flex flex-column min-vh-100">
             {loading ? (
                 <div className="d-flex justify-content-center align-items-center vh-100">
                     <div className="spinner-border" role="status">
@@ -37,7 +37,7 @@ function App() {
                     </div>
                 </div>
             ) : (
-                <div className="container p-3 fw-lighter">
+                <div className="container p-3 fw-lighter flex-grow-1">
                     <div className="d-flex justify-content-end">
                         <a className={`link-underline-opacity-0 eb-garamond fw-lighter ${theme === 'light' ? "link-dark" : "link-light"}`}
                            href="https://cynicdog.github.io">
@@ -90,31 +90,18 @@ function App() {
                             )}
                         </div>
                     </div>
-                    <div
-                        className="d-flex justify-content-center align-items-center text-secondary mt-3"
-                        style={{
-                            position: "absolute",
-                            bottom: "5px",
-                            left: "50%",
-                            transform: "translateX(-50%)",
-                            width: "100%",
-                            textAlign: "center"
-                        }}>
-                        <span
-                            className="me-2"
-                            style={{cursor: "pointer"}}
-                            onClick={() => window.location.href = "https://github.com/CynicDog/euro-2024-d3"}>
-                            Code on GitHub
-                        </span>
-                        <GitHub/>
-                    </div>
                 </div>
             )}
-            {/*TODO: absolute positioning */}
-            {/*<div className="d-flex justify-content-center p-2">*/}
-            {/*    <BackToTop />*/}
-            {/*</div>*/}
-        </>
+            <div className="d-flex justify-content-center align-items-center text-secondary mt-3 pb-3">
+                <span
+                    className="me-2"
+                    style={{cursor: "pointer"}}
+                    onClick={() => window.location.href = "https://github.com/CynicDog/euro-2024-d3"}>
+                    Code on GitHub
+                </span>
+                <GitHub/>
+            </div>
+        </div>
     );
 }
 
