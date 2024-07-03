@@ -1,9 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap');
 
 .eb-garamond {
   font-family: "EB Garamond", serif;
   font-optical-sizing: auto;
   font-weight: 400;
+  font-style: normal;
+}
+
+.merriweather-light {
+  font-family: "Merriweather", serif;
+  font-weight: 300;
   font-style: normal;
 }
 
@@ -35,4 +42,13 @@
   border-radius: 5px;
   padding-left: 5px;
   padding-right: 5px;
+}
+
+.sticky-rounds {
+  position: -webkit-sticky; /* For Safari */
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
