@@ -24,7 +24,7 @@ const PassesNetworkView = ({ period }) => {
 
     useEffect(() => {
         updateNetworkDiagram();
-    }, [match, team]);
+    }, [match, team, theme]);
 
     useEffect(() => {
         highlightPlayerPassRoutes();

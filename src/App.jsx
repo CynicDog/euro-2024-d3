@@ -12,31 +12,18 @@ import RoundsView from "./views/RoundsView.jsx";
 function App() {
 
     const [rounds, setRounds] = useState(null);
-    const [bracket, setBracket] = useState(null);
     const [loading, setLoading] = useState(true);
 
     const {match} = useMatch();
 
     useEffect(() => {
-        d3.json('src/data/bracket.json')
-            .then(fetchedData => {
-                setBracket(JSONToHierarchy(fetchedData));
+        d3.json('src/data/rounds.json')
+            .then(data => {
+                setRounds(data);
                 setLoading(false);
             })
             .catch(error => {
                 setLoading(true);
-            });
-    }, []);
-
-    useEffect(() => {
-        d3.json('src/data/rounds.json')
-            .then(data => {
-                console.log(data);
-                setRounds(data);
-                // setLoading(false);
-            })
-            .catch(error => {
-                // setLoading(true);
             })
     }, []);
 
