@@ -14,7 +14,7 @@ const Round = ({ title, selectedMatch, matches, setMatch }) => (
             return (
             <div
                 key={index}
-                className={`filter-btn merriweather-light my-2 ${selectedMatch && selectedMatch.name === r.name ? 'fw-bold' : ''}`}
+                className={`filter-btn merriweather-light my-2 ${selectedMatch && selectedMatch.name === r.name ? 'fw-bold fs-5' : ''}`}
                 onClick={() => {
                     d3.json(`src/data/${r.name}.json`).then(data => setMatch(data));
                 }}>
