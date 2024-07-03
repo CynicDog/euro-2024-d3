@@ -96,6 +96,11 @@ const MatchContext = createContext();
 export const MatchProvider = ({ children }) => {
     const [match, setMatch] = useState(null);
 
+    useEffect(() => {
+        d3.json(`src/data/round-of-sixteen-1-1-1.json`)
+            .then(data => setMatch(data));
+    }, []);
+
     return (
         <MatchContext.Provider value={{ match, setMatch }}>
             {children}
@@ -106,15 +111,23 @@ export const useMatch = () => useContext(MatchContext);
 
 // Team Provider
 const TeamContext = createContext();
+
 export const TeamProvider = ({ children }) => {
+    const { match } = useMatch();
     const [team, setTeam] = useState(null);
 
+    useEffect(() => {
+        if (match) {
+            setTeam(match.home);
+        }
+    }, [match]);
+
     return (
-        <TeamContext.Provider value={{ team, setTeam}}>
+        <TeamContext.Provider value={{ team, setTeam }}>
             {children}
         </TeamContext.Provider>
-    )
-}
+    );
+};
 export const useTeam = () => useContext(TeamContext);
 
 // Player Provider
