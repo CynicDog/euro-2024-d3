@@ -59,14 +59,14 @@
     "name": "quarter-finals-1-1",
     "team_1": "England",
     "team_2": "Switzerland",
-    "won": "",
+    "won": "England",
     "round": "quarter-finals"
   },
   {
     "name": "quarter-finals-1-2",
     "team_1": "Netherlands",
     "team_2": "Türkiye",
-    "won": "",
+    "won": "Netherlands",
     "round": "quarter-finals"
   },
   {
@@ -85,15 +85,15 @@
   },
   {
     "name": "semi-finals-1",
-    "team_1": "",
-    "team_2": "",
+    "team_1": "Netherlands",
+    "team_2": "England",
     "won": "",
     "round": "semi-finals"
   },
   {
     "name": "semi-finals-2",
-    "team_1": "",
-    "team_2": "",
+    "team_1": "Spain",
+    "team_2": "France",
     "won": "",
     "round": "semi-finals"
   },
