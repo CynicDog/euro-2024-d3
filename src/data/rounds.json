@@ -87,20 +87,20 @@
     "name": "semi-finals-1",
     "team_1": "Netherlands",
     "team_2": "England",
-    "won": "",
+    "won": "England",
     "round": "semi-finals"
   },
   {
     "name": "semi-finals-2",
     "team_1": "Spain",
     "team_2": "France",
-    "won": "",
+    "won": "Spain",
     "round": "semi-finals"
   },
   {
     "name": "finals",
-    "team_1": "",
-    "team_2": "",
+    "team_1": "England",
+    "team_2": "Spain",
     "won": "",
     "round": "finals"
   }
